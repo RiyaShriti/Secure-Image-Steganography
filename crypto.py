@@ -1,54 +1,102 @@
 import base64
 import hashlib
+import os
 
 from cryptography.fernet import Fernet
 
 
-def generate_key(password):
+# =========================================
+# SECURITY SETTINGS
+# =========================================
+
+ITERATIONS = 600_000
+SALT_SIZE = 16
+
+
+# =========================================
+# GENERATE KEY FROM PASSWORD
+# =========================================
+
+def generate_key(password, salt):
     """
-    Convert the user's password into a Fernet-compatible key.
+    Derive a secure encryption key from
+    the user's password using PBKDF2.
     """
 
     password_bytes = password.encode("utf-8")
 
-    hash_value = hashlib.sha256(
-        password_bytes
-    ).digest()
-
-    key = base64.urlsafe_b64encode(
-        hash_value
+    key = hashlib.pbkdf2_hmac(
+        "sha256",
+        password_bytes,
+        salt,
+        ITERATIONS
     )
 
-    return key
+    return base64.urlsafe_b64encode(key)
 
+
+# =========================================
+# ENCRYPT MESSAGE
+# =========================================
 
 def encrypt_message(message, password):
     """
-    Encrypt the secret message using the password.
+    Encrypt a message using a password.
+
+    A random salt is generated for every
+    encryption operation.
     """
 
-    key = generate_key(password)
+    salt = os.urandom(SALT_SIZE)
+
+    key = generate_key(
+        password,
+        salt
+    )
 
     cipher = Fernet(key)
 
-    encrypted_message = cipher.encrypt(
+    encrypted = cipher.encrypt(
         message.encode("utf-8")
     )
 
-    return encrypted_message.decode("utf-8")
+    # Store salt + encrypted data
+    result = (
+        base64.urlsafe_b64encode(salt).decode()
+        + ":"
+        + encrypted.decode()
+    )
 
+    return result
+
+
+# =========================================
+# DECRYPT MESSAGE
+# =========================================
 
 def decrypt_message(encrypted_message, password):
     """
-    Decrypt the encrypted message.
+    Decrypt a message using the password
+    and the salt stored with the ciphertext.
     """
 
-    key = generate_key(password)
+    salt_b64, encrypted_data = (
+        encrypted_message.split(":", 1)
+    )
+
+    salt = base64.urlsafe_b64decode(
+        salt_b64.encode()
+    )
+
+    key = generate_key(
+        password,
+        salt
+    )
 
     cipher = Fernet(key)
 
-    decrypted_message = cipher.decrypt(
-        encrypted_message.encode("utf-8")
+    decrypted = cipher.decrypt(
+        encrypted_data.encode()
     )
 
-    return decrypted_message.decode("utf-8")
+    return decrypted.decode("utf-8")

@@ -1,5 +1,12 @@
-from steganography import encode_image, decode_image
-from crypto import encrypt_message, decrypt_message
+from steganography import (
+    encode_image,
+    decode_image
+)
+
+from crypto import (
+    encrypt_message,
+    decrypt_message
+)
 
 from image_metrics import (
     calculate_mse,
@@ -60,7 +67,7 @@ decrypted_message = decrypt_message(
 
 
 # =========================================
-# IMAGE QUALITY
+# IMAGE ANALYSIS
 # =========================================
 
 mse = calculate_mse(
@@ -68,67 +75,27 @@ mse = calculate_mse(
     "encoded.png"
 )
 
-psnr = calculate_psnr(mse)
+psnr = calculate_psnr(
+    mse
+)
 
 ssim = calculate_ssim(
     "sample.png",
     "encoded.png"
 )
 
-
-# =========================================
-# CAPACITY
-# =========================================
-
 capacity = get_image_capacity(
     "sample.png"
 )
 
-
-# =========================================
-# RESULTS
-# =========================================
-
-print("\n==============================")
-print("        PROJECT RESULTS")
-print("==============================")
-
-print("\nOriginal Message:")
-print(message)
-
-print("\nDecoded Message:")
-print(decrypted_message)
-
-print("\nImage Capacity:")
-print(f"{capacity} bytes")
-print(f"{capacity / 1024:.2f} KB")
-
-print("\nImage Quality:")
-
-print(f"MSE  : {mse:.6f}")
-
-print(f"PSNR : {psnr:.2f} dB")
-
-print(f"SSIM : {ssim:.6f}")
-
-print("==============================")
-
-message_size = get_message_size(message)
-
-print("\nMessage Size:")
-print(f"{message_size} bytes")
-print(f"{message_size / 1024:.2f} KB")
-
-
-# =========================================
-# CAPACITY USAGE
-# =========================================
-
-message_size = get_message_size(message)
+message_size = get_message_size(
+    message
+)
 
 usage = (
     message_size / capacity
 ) * 100
+
 
 # =========================================
 # RESULTS
