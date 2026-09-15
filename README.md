@@ -322,6 +322,48 @@ Through this project, the following concepts are practiced:
 
 
 
+
+
+\## 🖥️ Application Screenshots
+
+
+
+\### 🏠 Application Interface
+
+
+
+This is the main interface of the Secure Image Steganography application.
+
+
+
+!\[Application Interface](screenshots/home.png)
+
+
+
+\### 🔐 Encoding a Secret Message
+
+
+
+The encoding section allows users to upload an image and hide a secret message inside it.
+
+
+
+!\[Encoding Process](screenshots/encode.png)
+
+
+
+\### 🔓 Decoding a Secret Message
+
+
+
+The decoding section allows users to upload an encoded image and extract the hidden message.
+
+
+
+!\[Decoding Process](screenshots/decode.png)
+
+
+
 \## 👩‍💻 Author
 
 
