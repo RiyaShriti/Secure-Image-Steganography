@@ -1,7 +1,8 @@
 venv/
+.venv/
+env/
 __pycache__/
-*.pyc
+*.py[cod]
+.ipynb_checkpoints/
 .env
-encoded.png
-encoded_output.png
-.git_backup/
+.DS_Store
