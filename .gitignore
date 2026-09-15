@@ -1,0 +1,7 @@
+venv/
+__pycache__/
+*.pyc
+.env
+encoded.png
+encoded_output.png
+.git_backup/
